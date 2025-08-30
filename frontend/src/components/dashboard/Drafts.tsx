@@ -65,7 +65,7 @@ const Drafts = () => {
     }
   };
 
-  const handleContinueWriting = (draft: Draft) => {
+  const handleContinueWriting = () => {
     // TODO: Navigate to blog editor with draft data
     // For now, just navigate to new blog page
     navigate('/dashboard/new-blog');
@@ -156,7 +156,7 @@ const Drafts = () => {
                   </div>
                   <div className="flex space-x-2">
                     <button 
-                      onClick={() => handleContinueWriting(draft)}
+                      onClick={() => handleContinueWriting()}
                       className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
                     >
                       Continue Writing

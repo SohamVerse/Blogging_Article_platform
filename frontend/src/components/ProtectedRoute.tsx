@@ -23,7 +23,7 @@ const ProtectedRoute = ({ children, requiredRole = 'user', redirectTo }: Protect
     const checkAuth = () => {
       const token = localStorage.getItem('token');
       const userData = localStorage.getItem('user');
-
+      console.log(user);
       if (!token || !userData) {
         navigate('/auth/login');
         return;

@@ -196,21 +196,32 @@ const handleBlogToggle = async (blogId: string, isPublished: boolean) => {
   }
 };
 
-  const handleModerateBlog = async (blogId: string, action: 'approve' | 'reject') => {
-    try {
-      const token = localStorage.getItem('token');
-      await axios.patch(`https://blogging-article-platform.onrender.com/api/admin/blogs/${blogId}/moderate`, 
-        { action }, 
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+  // const handleModerateBlog = async (blogId: string, action: 'approve' | 'reject') => {
+  //   try {
+  //     const token = localStorage.getItem('token');
+  //     await axios.patch(`https://blogging-article-platform.onrender.com/api/admin/blogs/${blogId}/moderate`, 
+  //       { action }, 
+  //       { headers: { Authorization: `Bearer ${token}` } }
+  //     );
       
-      setBlogs(prev => prev.map(blog => 
-        blog._id === blogId ? { ...blog, status: action === 'approve' ? 'approved' : 'rejected' } : blog
-      ));
-    } catch (error) {
-      console.error('Error moderating blog:', error);
-    }
-  };
+  //     setBlogs(prev => prev.map(blog => 
+  //       blog._id === blogId ? { ...blog, status: action === 'approve' ? 'approved' : 'rejected' } : blog
+  //     ));
+  //   } catch (error) {
+  //     console.error('Error moderating blog:', error);
+  //   }
+  // };
+  // const handleDeleteBlog = async (blogId: string) => {
+  //   try {
+  //     const token = localStorage.getItem('token');
+  //     await axios.delete(`https://blogging-article-platform.onrender.com/api/admin/blogs/${blogId}`, {
+  //       headers: { Authorization: `Bearer ${token}` }
+  //     });
+  //     setBlogs(prev => prev.filter(blog => blog._id !== blogId));
+  //   } catch (error) {
+  //     console.error('Error deleting blog:', error);
+  //   }
+  // };
 
   if (loading) {
     return (

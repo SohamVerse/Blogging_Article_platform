@@ -24,7 +24,7 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors({
-  origin: ["http://localhost:5173", "https://blogging-article-platform.onrender.com"],
+  origin: ["https://blogging-article-platform.netlify.app", "https://blogging-article-platform.onrender.com"],
   credentials: true
 }));
 app.use(express.json());

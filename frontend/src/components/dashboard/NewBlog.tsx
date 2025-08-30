@@ -7,14 +7,7 @@ export type Block = {
   content: string;
 };
 
-interface BlogData {
-  title: string;
-  subtitle?: string;
-  content: Block[];
-  tags: string[];
-  timeToRead: number;
-  coverImage?: string;
-}
+
 
 const NewBlog = () => {
   const navigate = useNavigate();
@@ -83,13 +76,7 @@ const NewBlog = () => {
     }
   };
 
-  const generateSlug = (title: string): string => {
-    return title
-      .toLowerCase()
-      .trim()
-      .replace(/[^\w\s-]/g, "")
-      .replace(/\s+/g, "-");
-  };
+
 
   const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -134,7 +121,7 @@ const NewBlog = () => {
       const response = await axios.post('https://blogging-article-platform.onrender.com/api/blogs', blogData, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-
+      console.log(response)
       alert("Blog submitted for review successfully! It will be published after admin approval.");
       navigate("/dashboard");
     } catch (error: any) {
@@ -174,7 +161,7 @@ const NewBlog = () => {
       const response = await axios.post('https://blogging-article-platform.onrender.com/api/blogs', blogData, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-
+      console.log(response);
       alert("Draft saved successfully! You can submit it for review when ready.");
       navigate("/dashboard");
     } catch (error: any) {
