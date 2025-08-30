@@ -113,6 +113,7 @@ const getBlogs = async (req, res) => {
 };
 
 // Get blog by ID (only approved and published)
+// ...existing code...
 const getBlogById = async (req, res) => {
   try {
     const blog = await BlogModel.findById(req.params.id)
@@ -123,7 +124,12 @@ const getBlogById = async (req, res) => {
       return res.status(404).json({ message: "Blog not found" });
     }
 
-    // Only allow access to approved and published blogs
+    // If user is admin, allow access to any blog
+    if (req.user && req.user.role === 'admin') {
+      return res.json(blog);
+    }
+
+    // Only allow access to approved and published blogs for others
     if (blog.status !== 'approved' || !blog.isPublished) {
       return res.status(403).json({ message: "This blog is not available for viewing" });
     }
@@ -141,6 +147,7 @@ const getBlogById = async (req, res) => {
     });
   }
 };
+// ...existing code...
 
 // Update blog (only author can update)
 const updateBlog = async (req, res) => {

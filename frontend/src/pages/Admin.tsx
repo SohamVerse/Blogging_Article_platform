@@ -178,21 +178,23 @@ const Admin = () => {
     }
   };
 
-  const handleBlogToggle = async (blogId: string, isPublished: boolean) => {
-    try {
-      const token = localStorage.getItem('token');
-      await axios.patch(`http://localhost:3000/api/admin/blogs/${blogId}`, 
-        { isPublished }, 
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      
-      setBlogs(prev => prev.map(blog => 
-        blog._id === blogId ? { ...blog, isPublished } : blog
-      ));
-    } catch (error) {
-      console.error('Error updating blog:', error);
-    }
-  };
+const handleBlogToggle = async (blogId: string, isPublished: boolean) => {
+  try {
+    const token = localStorage.getItem('token');
+    const res = await axios.patch(`http://localhost:3000/api/admin/blogs/${blogId}`, 
+      { isPublished }, 
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    
+    setBlogs(prev => prev.map(blog => 
+      blog._id === blogId 
+        ? { ...blog, isPublished, status: res.data.blog.status } // Update status from backend response
+        : blog
+    ));
+  } catch (error) {
+    console.error('Error updating blog:', error);
+  }
+};
 
   const handleModerateBlog = async (blogId: string, action: 'approve' | 'reject') => {
     try {
@@ -434,122 +436,53 @@ const Admin = () => {
           </div>
         )}
 
-        {activeTab === 'blogs' && (
-          <div className="bg-white rounded-lg shadow border">
-            <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Blog Management</h3>
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Blog</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Views</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Likes</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {blogs.map((blog) => (
-                      <tr key={blog._id}>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">{blog.title}</div>
-                          <div className="text-sm text-gray-500">
-                            {new Date(blog.createdAt).toLocaleDateString()}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {blog.author.username}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                            blog.status === 'approved' ? 'bg-green-100 text-green-800' : 
-                            blog.status === 'pending_review' ? 'bg-yellow-100 text-yellow-800' :
-                            blog.status === 'rejected' ? 'bg-red-100 text-red-800' :
-                            'bg-gray-100 text-gray-800'
-                          }`}>
-                            {blog.status}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {blog.views}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {blog.likes.length}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <button
-                            onClick={() => handleBlogToggle(blog._id, !blog.isPublished)}
-                            className={`px-3 py-1 rounded-md text-xs ${
-                              blog.isPublished 
-                                ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200' 
-                                : 'bg-green-100 text-green-700 hover:bg-green-200'
-                            }`}
-                          >
-                            {blog.isPublished ? 'Unpublish' : 'Publish'}
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        )}
 
-        {activeTab === 'moderation' && (
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow border">
-              <div className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Content Moderation Queue</h3>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Blog</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submitted</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {blogs.filter(blog => blog.status === 'pending_review').map((blog) => (
-                        <tr key={blog._id}>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm font-medium text-gray-900">{blog.title}</div>
-                            <div className="text-sm text-gray-500">{blog.subtitle}</div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {blog.author.username}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {blog.submittedForReview ? new Date(blog.submittedForReview).toLocaleDateString() : 'N/A'}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <button
-                              onClick={() => handleModerateBlog(blog._id, 'approve')}
-                              className="bg-green-600 text-white px-3 py-1 rounded-md text-xs hover:bg-green-700 mr-2"
-                            >
-                              Approve
-                            </button>
-                            <button
-                              onClick={() => handleModerateBlog(blog._id, 'reject')}
-                              className="bg-red-600 text-white px-3 py-1 rounded-md text-xs hover:bg-red-700"
-                            >
-                              Reject
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+{activeTab === 'blogs' && (
+  <div className="bg-white rounded-lg shadow border">
+    <div className="p-6">
+      <table className="min-w-full">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Status</th>
+            <th>Published</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {blogs.map(blog => (
+            <tr
+              key={blog._id}
+              className="cursor-pointer hover:bg-gray-100"
+              onClick={() => navigate(`/admin/blogs/${blog._id}`)}
+            >
+              <td>{blog.title}</td>
+              <td>{blog.author.username}</td>
+              <td>{blog.status}</td>
+              <td>{blog.isPublished ? "Yes" : "No"}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <button
+                  onClick={e => {
+                    e.stopPropagation(); // prevent row navigation
+                    handleBlogToggle(blog._id, !blog.isPublished);
+                  }}
+                  className={`px-3 py-1 rounded-md text-xs ${
+                    blog.isPublished
+                      ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200'
+                      : 'bg-green-100 text-green-700 hover:bg-green-200'
+                  }`}
+                >
+                  {blog.isPublished ? 'Unpublish' : 'Publish'}
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+)}
 
         {activeTab === 'analytics' && (
           <div className="space-y-6">

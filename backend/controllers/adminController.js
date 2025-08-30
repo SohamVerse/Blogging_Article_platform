@@ -227,11 +227,16 @@ const updateBlogStatus = async (req, res) => {
       return res.status(404).json({ message: "Blog not found" });
     }
 
-    // Only allow publishing if blog is approved
-    if (isPublished && blog.status !== 'approved') {
-      return res.status(400).json({ 
-        message: "Only approved blogs can be published" 
-      });
+    // Only allow publishing if blog is approved or pending_review
+    if (isPublished) {
+      if (blog.status === 'pending_review') {
+        blog.status = 'approved'; // Change status to approved when publishing
+        blog.moderationStatus = 'approved';
+      } else if (blog.status !== 'approved') {
+        return res.status(400).json({ 
+          message: "Only approved or pending_review blogs can be published" 
+        });
+      }
     }
 
     blog.isPublished = isPublished;
@@ -249,7 +254,8 @@ const updateBlogStatus = async (req, res) => {
         _id: blog._id,
         title: blog.title,
         isPublished: blog.isPublished,
-        publishedAt: blog.publishedAt
+        publishedAt: blog.publishedAt,
+        status: blog.status // Return updated status
       }
     });
   } catch (error) {

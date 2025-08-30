@@ -9,7 +9,7 @@ import Dashboard from './pages/Dashboard'
 import Admin from './pages/Admin'
 import NewBlog from './components/dashboard/NewBlog'
 import ProtectedRoute from './components/ProtectedRoute'
-
+import AdminBlogDetails from "./pages/AdminBlogDetails";
 function App() {
   return (
     <>
@@ -23,6 +23,7 @@ function App() {
         } />
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/signup" element={<Signup />} />
+        <Route path="/admin/blogs/:id" element={<AdminBlogDetails />} />
         <Route path="/dashboard" element={
           <ProtectedRoute>
             <Dashboard />
