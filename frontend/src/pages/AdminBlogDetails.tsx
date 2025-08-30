@@ -12,7 +12,7 @@ const AdminBlogDetails = () => {
     const fetchBlog = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get(`http://localhost:3000/api/blogs/${id}`, {
+        const res = await axios.get(`https://blogging-article-platform.onrender.com/api/blogs/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setBlog(res.data);

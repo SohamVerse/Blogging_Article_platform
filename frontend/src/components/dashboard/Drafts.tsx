@@ -30,7 +30,7 @@ const Drafts = () => {
         return;
       }
 
-      const response = await axios.get('http://localhost:3000/api/blogs/user/me', {
+      const response = await axios.get('https://blogging-article-platform.onrender.com/api/blogs/user/me', {
         headers: { Authorization: `Bearer ${token}` },
         params: { status: 'draft' }
       });
@@ -81,7 +81,7 @@ const Drafts = () => {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:3000/api/blogs/${selectedDraft._id}`, {
+      await axios.delete(`https://blogging-article-platform.onrender.com/api/blogs/${selectedDraft._id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       

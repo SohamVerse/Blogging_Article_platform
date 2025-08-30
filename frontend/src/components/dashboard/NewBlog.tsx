@@ -131,7 +131,7 @@ const NewBlog = () => {
       };
 
       // Create blog using backend API (will be submitted for review)
-      const response = await axios.post('http://localhost:3000/api/blogs', blogData, {
+      const response = await axios.post('https://blogging-article-platform.onrender.com/api/blogs', blogData, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -171,7 +171,7 @@ const NewBlog = () => {
       };
 
       // Save as draft (will not be submitted for review)
-      const response = await axios.post('http://localhost:3000/api/blogs', blogData, {
+      const response = await axios.post('https://blogging-article-platform.onrender.com/api/blogs', blogData, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 

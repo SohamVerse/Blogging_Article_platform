@@ -42,7 +42,7 @@ const Dashboard = () => {
 
       try {
         // Verify token with backend
-        const response = await axios.get('http://localhost:3000/api/auth/verify', {
+        const response = await axios.get('https://blogging-article-platform.onrender.com/api/auth/verify', {
           headers: { Authorization: `Bearer ${token}` }
         });
         

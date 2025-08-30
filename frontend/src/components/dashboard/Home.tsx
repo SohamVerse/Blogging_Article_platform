@@ -38,7 +38,7 @@ const Home = () => {
   const fetchBlogs = async () => {
     try {
       // Fetch blogs from backend API
-      const response = await axios.get('http://localhost:3000/api/blogs', {
+      const response = await axios.get('https://blogging-article-platform.onrender.com/api/blogs', {
         params: {
           sort: sortBy,
           limit: 20

@@ -34,7 +34,7 @@ const Articles = () => {
         return;
       }
 
-      const response = await axios.get('http://localhost:3000/api/blogs/user/me', {
+      const response = await axios.get('https://blogging-article-platform.onrender.com/api/blogs/user/me', {
         headers: { Authorization: `Bearer ${token}` },
         params: { status: 'published' }
       });
@@ -77,7 +77,7 @@ const Articles = () => {
   const handleSubmitForReview = async (article: Article) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.post(`http://localhost:3000/api/blogs/${article._id}/submit-review`, {}, {
+      await axios.post(`https://blogging-article-platform.onrender.com/api/blogs/${article._id}/submit-review`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       

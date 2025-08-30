@@ -18,7 +18,7 @@ const Signup: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:3000/api/users", { 
+      const response = await axios.post("https://blogging-article-platform.onrender.com/api/users", { 
         username, 
         email, 
         password 

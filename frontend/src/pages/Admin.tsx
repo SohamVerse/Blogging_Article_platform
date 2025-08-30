@@ -90,13 +90,13 @@ const Admin = () => {
     try {
       const token = localStorage.getItem('token');
       const [usersRes, blogsRes, statsRes] = await Promise.all([
-        axios.get('http://localhost:3000/api/admin/users', {
+        axios.get('https://blogging-article-platform.onrender.com/api/admin/users', {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        axios.get('http://localhost:3000/api/admin/blogs', {
+        axios.get('https://blogging-article-platform.onrender.com/api/admin/blogs', {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        axios.get('http://localhost:3000/api/admin/stats', {
+        axios.get('https://blogging-article-platform.onrender.com/api/admin/stats', {
           headers: { Authorization: `Bearer ${token}` }
         })
       ]);
@@ -165,7 +165,7 @@ const Admin = () => {
   const handleUserToggle = async (userId: string, isActive: boolean) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.patch(`http://localhost:3000/api/admin/users/${userId}`, 
+      await axios.patch(`https://blogging-article-platform.onrender.com/api/admin/users/${userId}`, 
         { isActive }, 
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -181,7 +181,7 @@ const Admin = () => {
 const handleBlogToggle = async (blogId: string, isPublished: boolean) => {
   try {
     const token = localStorage.getItem('token');
-    const res = await axios.patch(`http://localhost:3000/api/admin/blogs/${blogId}`, 
+    const res = await axios.patch(`https://blogging-article-platform.onrender.com/api/admin/blogs/${blogId}`, 
       { isPublished }, 
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -199,7 +199,7 @@ const handleBlogToggle = async (blogId: string, isPublished: boolean) => {
   const handleModerateBlog = async (blogId: string, action: 'approve' | 'reject') => {
     try {
       const token = localStorage.getItem('token');
-      await axios.patch(`http://localhost:3000/api/admin/blogs/${blogId}/moderate`, 
+      await axios.patch(`https://blogging-article-platform.onrender.com/api/admin/blogs/${blogId}/moderate`, 
         { action }, 
         { headers: { Authorization: `Bearer ${token}` } }
       );
