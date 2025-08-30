@@ -1,9 +1,19 @@
 const UserModel = require("../models/userModel");
-const generateToken = require("../utils/generateToken");
+const { generateToken } = require("../utils/generateToken");
 // Create new user
 const createUser = async (req, res) => {
   try {
+    console.log('Creating user with data:', req.body);
     const { username, email, password, role } = req.body;
+
+    // Validate required fields
+    if (!username || !email || !password) {
+      return res.status(400).json({ 
+        message: "Missing required fields", 
+        required: ["username", "email", "password"],
+        received: { username: !!username, email: !!email, password: !!password }
+      });
+    }
 
     const existingUser = await UserModel.findOne({ email });
     if (existingUser) {
@@ -11,7 +21,10 @@ const createUser = async (req, res) => {
     }
 
     const newUser = new UserModel({ username, email, password, role });
+    console.log('New user object:', newUser);
+    
     await newUser.save();
+    console.log('User saved successfully');
 
     const { password: _, ...userWithoutPassword } = newUser.toObject();
 
@@ -21,6 +34,7 @@ const createUser = async (req, res) => {
       token: generateToken(newUser._id),
     });
   } catch (error) {
+    console.error('Error in createUser:', error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };

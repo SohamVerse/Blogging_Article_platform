@@ -242,6 +242,7 @@ export const NavbarButton = ({
   children,
   className,
   variant = "primary",
+  onClick,
   ...props
 }: {
   href?: string;
@@ -249,6 +250,7 @@ export const NavbarButton = ({
   children: React.ReactNode;
   className?: string;
   variant?: "primary" | "secondary" | "dark" | "gradient";
+  onClick?: () => void;
 } & (
   | React.ComponentPropsWithoutRef<"a">
   | React.ComponentPropsWithoutRef<"button">
@@ -266,6 +268,21 @@ export const NavbarButton = ({
     gradient:
       "bg-gradient-to-b from-blue-500 to-blue-700 text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset]",
   };
+
+  // If onClick is provided, render as button, otherwise render as link
+  if (onClick) {
+    // Filter out anchor-specific props for button
+    const { href: _, as: __, ...buttonProps } = props as any;
+    return (
+      <button
+        onClick={onClick}
+        className={cn(baseStyles, variantStyles[variant], className)}
+        {...buttonProps}
+      >
+        {children}
+      </button>
+    );
+  }
 
   return (
     <Tag
